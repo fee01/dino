@@ -6,6 +6,7 @@ import factory.DirectoryManager;
 import implementation.Directory;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 
@@ -29,7 +30,7 @@ public class DirectoryTest
 	@Before
 	public void setUp() throws Exception
 	{
-		
+		d = new Directory(new ConcurrentHashMap<String, Notebook>());
 	}
 
 	@Test

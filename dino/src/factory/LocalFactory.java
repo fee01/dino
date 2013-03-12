@@ -16,8 +16,8 @@ public class LocalFactory implements DirectoryManagerFactory {
 	}
 	
 	@Override
-	public Directory getDirectoryManager() {
-		// TODO Auto-generated method stub
+	public Directory getDirectoryManager() 
+	{
 		return new Directory(db);
 	}
 	
