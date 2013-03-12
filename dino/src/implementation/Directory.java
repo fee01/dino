@@ -25,7 +25,7 @@ public class Directory implements DirectoryManager
 	
 	
 	//the directory backed by HashMap
-	private Map<String, Notebook> db = new ConcurrentHashMap<String, Notebook>();
+	private Map<String, Notebook> db;
 	
 	private int IdSetter = 0;
 	

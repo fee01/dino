@@ -5,10 +5,14 @@ import implementation.Notebook;
 import java.util.List;
 import java.util.Map;
 
+import javax.ejb.Remote;
+
 import utilities.NotebookAlreadyExistsException;
 import utilities.NotebookNotFoundException;
 
-public interface DirectoryManager {
+@Remote
+public interface DirectoryManager 
+{
 
 	/**
 	 * Finds a notebook in the directory by its ID
@@ -32,5 +36,7 @@ public interface DirectoryManager {
 
 	//returning a copy of the DB for testing purposes
 	Map<String, Notebook> getCopyDB();
+	
+	
 
 }

@@ -36,7 +36,7 @@ public class NotebookSource
 {
 	DirectoryManager directoryManager;
 	
-	private DirectoryManager db;
+	//private DirectoryManager db;
 	
 	public NotebookSource(@Context ServletConfig config)
 	{
@@ -82,7 +82,7 @@ public class NotebookSource
 	@Produces("text/xml")
 	public Response getNoteBookFromId(@PathParam("notebookId") String id)
 	{	
-		NotebookList nbList = new NotebookList();		
+		//NotebookList nbList = new NotebookList();		
 		Notebook nb = new Notebook();
 		nb = directoryManager.getNotebook(id);		
 		//nbList.setNotebooks(db.getAllNotebooks());
@@ -129,15 +129,18 @@ public class NotebookSource
 		
 	}
 	
+	
+	
 	@POST
 	@Path("/notebook")
-	@Consumes("text/plain")
-	//@Produces("text/plain")	
-	public Response createNoteBook(String title)
-	{	
+	@Consumes("text/xml")
+	public Response createNotebook(String title)
+	{
 		try
 		{
-			directoryManager.createNotebook(title, "http://primary");
+			//String id =
+			directoryManager.createNotebook(title, "http:primary");
+			//Notebook nb = directoryManager.findById(id);
 			return Response.ok("Notebook: " + title + ", was added to the Database").build();
 		}
 		catch(NoteBookException ex)
@@ -148,6 +151,27 @@ public class NotebookSource
 		}
 		
 		
+	}
+	
+	//adds notebook using xml notebook at path 8080/dino/
+	@POST
+	@Consumes("text/xml")
+	public Response addNotebook(Notebook nb)
+	{
+		try
+		{
+			//String id =
+			directoryManager.createNotebook(nb.getTitle(), "http:primary");
+			//Notebook nb = directoryManager.findById(id);
+			//return Response.ok("Notebook: " + nb.getTitle() + ", was added to the Database").build();
+			return Response.ok("Notebook: " + nb.getTitle() + ", was added to the Database").build();
+		}
+		catch(NoteBookException ex)
+		{
+			NotebookExceptionMapper neMapper = new NotebookExceptionMapper();
+			return neMapper.toResponse(ex);
+					
+		}
 	}
 	
 	
