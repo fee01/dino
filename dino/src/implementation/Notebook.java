@@ -53,29 +53,7 @@ public class Notebook implements Serializable
 		this.notes = notes;
 	}
 	
-	@XmlElement (name="note")
-	public Note getNoteById(String Id) throws NotebookNotFoundException
-	{	
-		Note rtv = null;
-		for(Note note : notes)
-		{
-			try{
-				int convertedId = Integer.parseInt(Id);
-				if(note.getId() == convertedId);
-				{
-					return note;
-				}
-				
-			}
-			catch(NumberFormatException nfex)
-			{
-				throw new NotebookNotFoundException("The note id requires a number"); 
-			}
-			
-		}
-		return rtv;
-	}
-	
+		
 	@XmlElement (name="title")
 	public String getTitle()
 	{

@@ -12,13 +12,17 @@ import implementation.NotebookList;
 
 
 import javax.servlet.ServletConfig;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import utilities.NoteBookException;
+import utilities.NotebookExceptionMapper;
 import utilities.NotebookNotFoundException;
 
 
@@ -37,7 +41,7 @@ public class NotebookSource
 	public NotebookSource(@Context ServletConfig config)
 	{
 		directoryManager = new Factory(config).getDirectoryManager();
-		
+		//this.db = directoryManager.getCopyDB();
 		//this.db = Directory.getDatabase();
 	}
 	
@@ -66,8 +70,11 @@ public class NotebookSource
 	@Path("/notebook")
 	@Produces("text/xml")
 	public Response getAllNoteBooksOnCurrentServer()
-	{
-		return getAllNoteBooksFromServer();
+	{		
+		NotebookList nbList = new NotebookList();
+		nbList.setNotebooks(directoryManager.getAllNotebooks());
+		//nbList.setNotebooks(db.getAllNotebooks());
+		return Response.ok(nbList).build();
 	}
 	
 	@GET
@@ -94,16 +101,24 @@ public class NotebookSource
 	@Path("/notes/{notebookId}/{noteId}")
 	@Produces("text/xml")
 	public Response getNoteFromId(@PathParam("notebookId") String nbId, @PathParam("noteId") String noteId)
-	{	
-		Note note;
+	{			
 		Notebook nb = directoryManager.getNotebook(nbId);
 		try
-		{			
-				return Response.ok(nb.getNoteById(noteId)).build();			
-		}
-		catch(NotebookNotFoundException nnfex)
 		{
+			for(Note note : nb.getNotes())
+			{
+				if(note.getId() == Integer.parseInt(noteId))
+				{
+					return Response.ok(note).build();
+				}
+			}
 			return Response.status(Response.Status.NOT_FOUND)
+			.entity("Request failed: no note with that Id").type("text/plain").build();
+							
+		}
+		catch(NumberFormatException nnfex)
+		{
+			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("request failed: " + nnfex.getMessage()).type("text/plain").build();
 		}
 		catch(NullPointerException npex)
@@ -111,6 +126,27 @@ public class NotebookSource
 			return Response.status(Response.Status.NOT_FOUND)
 					.entity("request failed: " + npex.getMessage()).type("text/plain").build();
 		}
+		
+	}
+	
+	@POST
+	@Path("/notebook")
+	@Consumes("text/plain")
+	//@Produces("text/plain")	
+	public Response createNoteBook(String title)
+	{	
+		try
+		{
+			directoryManager.createNotebook(title, "http://primary");
+			return Response.ok("Notebook: " + title + ", was added to the Database").build();
+		}
+		catch(NoteBookException ex)
+		{
+			NotebookExceptionMapper neMapper = new NotebookExceptionMapper();
+			return neMapper.toResponse(ex);
+					
+		}
+		
 		
 	}
 	

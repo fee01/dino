@@ -1,6 +1,8 @@
 package utilities;
 
-public class NotebookAlreadyExistsException extends Exception
+import implementation.Note;
+
+public class NotebookAlreadyExistsException extends NoteBookException
 {
 
 	private static final long serialVersionUID = -5039124568710291971L;

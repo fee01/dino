@@ -1,6 +1,6 @@
 package utilities;
 
-public class NotebookNotFoundException extends Exception
+public class NotebookNotFoundException extends NoteBookException
 {
 	private static final long serialVersionUID = -3946465825945565956L;
 
