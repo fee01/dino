@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="dino">
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="DinoFee4">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="dino"/>
-        <property name="java-output-path" value="/dino/build/classes"/>
+        <property name="context-root" value="DinoFee4"/>
+        <property name="java-output-path" value="/DinoFee4/build/classes"/>
     </wb-module>
 </project-modules>

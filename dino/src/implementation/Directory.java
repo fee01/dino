@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import factory.DirectoryManager;
-
 import utilities.NotebookAlreadyExistsException;
 import utilities.NotebookNotFoundException;
 
@@ -15,42 +13,36 @@ import utilities.NotebookNotFoundException;
 /**
  * @author  JFee
  */
-public class Directory implements DirectoryManager 
-{
-	
+public class Directory 
+{	
 	//Singleton Pattern used
-	//public final static DirectoryManager INSTANCE = new Directory(); 
-	//private Directory(){};
-	
-	
+	public final static Directory INSTANCE = new Directory(); 
+	private Directory(){};
 	
 	//the directory backed by HashMap
-	private Map<String, Notebook> db;
+	private Map<String, Notebook> db = new ConcurrentHashMap<String, Notebook>();
 	
 	private int IdSetter = 0;
-	
-	public Directory(Map<String, Notebook> db)
-	{
-		this.db = db;
-	}
 
-	/* (non-Javadoc)
-	 * @see implementation.DirectoryManager#findById(java.lang.String)
+	/**
+	 * Finds a notebook in the directory by its ID
+	 * @param id the wanted notebook's ID 
+	 * @return the found Notebook or null otherwise
 	 */
-	@Override
 	public Notebook findById(String id)
 	{
 		return db.get(id);	
 	}
 	
-	/* (non-Javadoc)
-	 * @see implementation.DirectoryManager#findByTitle(java.lang.String)
+	/**
+	 * Find a notebook by its unique title
+	 * @param title title of notebook to find
+	 * @return the wanted notebook or null otherwise
 	 */
-	@Override
 	public Notebook findByTitle(String title)
 	{
 		for(Notebook n: this.getAllNotebooks())
-		{			
+		{
 			if(n.getTitle().equalsIgnoreCase(title))
 			{
 				return n;
@@ -60,30 +52,19 @@ public class Directory implements DirectoryManager
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see implementation.DirectoryManager#getAllNotebooks()
-	 */
-	@Override
 	public List<Notebook> getAllNotebooks()
 	{
 		List<Notebook> all = new ArrayList<Notebook>(db.values());
 		return all;
 	}
 
-	/* (non-Javadoc)
-	 * @see implementation.DirectoryManager#getNotebook(java.lang.String)
-	 */
-	@Override
 	public Notebook getNotebook(String id)
 	{
 		return this.findById(id);
 	}
 
-	/* (non-Javadoc)
-	 * @see implementation.DirectoryManager#createNotebook(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public String createNotebook(String title, String primaryURL) throws NotebookAlreadyExistsException			
+	public String createNotebook(String title, String primaryURL)
+			throws NotebookAlreadyExistsException
 	{
 		//check if id is already associated with a notebook
 		if(this.findById(primaryURL) != null)
@@ -108,10 +89,6 @@ public class Directory implements DirectoryManager
 		return id;
 	}
 	
-	/* (non-Javadoc)
-	 * @see implementation.DirectoryManager#createNotebook(java.lang.String)
-	 */
-	@Override
 	public String createNotebook(String title)
 			throws NotebookAlreadyExistsException
 	{
@@ -143,10 +120,6 @@ public class Directory implements DirectoryManager
 	
 
 
-	/* (non-Javadoc)
-	 * @see implementation.DirectoryManager#deleteNotebook(java.lang.String)
-	 */
-	@Override
 	public void deleteNotebook(String id)
 			throws NotebookNotFoundException
 	{
@@ -160,18 +133,13 @@ public class Directory implements DirectoryManager
 
 	}
 	
-	public static DirectoryManager getDatabase()
+	public static Directory getDatabase()
 	{
-		return null;
-		//return INSTANCE;
+		return INSTANCE;
 	}
 	
 	
 	//returning a copy of the DB for testing purposes
-	/* (non-Javadoc)
-	 * @see implementation.DirectoryManager#getCopyDB()
-	 */
-	@Override
 	public Map<String, Notebook> getCopyDB()
 	{
 		Map<String, Notebook> copy = new HashMap<String, Notebook>();

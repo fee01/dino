@@ -10,8 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import utilities.NotebookNotFoundException;
-
 
 
 
@@ -43,7 +41,7 @@ public class Notebook implements Serializable
 	}
 	
 	
-	@XmlElement (name="notes")
+	@XmlElement (name="note")
 	public ArrayList<Note> getNotes()
 	{
 		return notes;
@@ -53,7 +51,7 @@ public class Notebook implements Serializable
 		this.notes = notes;
 	}
 	
-		
+	
 	@XmlElement (name="title")
 	public String getTitle()
 	{

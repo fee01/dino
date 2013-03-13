@@ -2,11 +2,9 @@ package testing;
 
 import static org.junit.Assert.*;
 
-import factory.DirectoryManager;
 import implementation.Directory;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 
@@ -25,12 +23,12 @@ import utilities.NotebookNotFoundException;
  */
 public class DirectoryTest
 {
-	DirectoryManager d = null;
+	Directory d = Directory.INSTANCE;
 
 	@Before
 	public void setUp() throws Exception
 	{
-		d = new Directory(new ConcurrentHashMap<String, Notebook>());
+		
 	}
 
 	@Test

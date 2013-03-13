@@ -3,58 +3,49 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
-import factory.DirectoryManager;
-import factory.Factory;
 import implementation.Directory;
 import implementation.Note;
 import implementation.Notebook;
 import implementation.NotebookList;
 
 
-import javax.servlet.ServletConfig;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import utilities.NoteBookException;
+import utilities.NotebookAlreadyExistsException;
 import utilities.NotebookExceptionMapper;
-import utilities.NotebookNotFoundException;
 
 
 
 
-
-//@Path("notebook")
 
 @Path("")
 public class NotebookSource 
 {
-	DirectoryManager directoryManager;
 	
-	//private DirectoryManager db;
+	private Directory db;
 	
-	public NotebookSource(@Context ServletConfig config)
+	public NotebookSource()
 	{
-		directoryManager = new Factory(config).getDirectoryManager();
-		//this.db = directoryManager.getCopyDB();
-		//this.db = Directory.getDatabase();
+		this.db = Directory.getDatabase();
 	}
 	
 	
 
 	
 	@GET
+	@Path("")
 	@Produces("text/xml")
 	public Response getAllNoteBooksFromServer()
 	{
 		NotebookList nbList = new NotebookList();
-		nbList.setNotebooks(directoryManager.getAllNotebooks());
-		//nbList.setNotebooks(db.getAllNotebooks());
+		nbList.setNotebooks(db.getAllNotebooks());
 		return Response.ok(nbList).build();
 	}
 	
@@ -72,8 +63,7 @@ public class NotebookSource
 	public Response getAllNoteBooksOnCurrentServer()
 	{		
 		NotebookList nbList = new NotebookList();
-		nbList.setNotebooks(directoryManager.getAllNotebooks());
-		//nbList.setNotebooks(db.getAllNotebooks());
+		nbList.setNotebooks(db.getAllNotebooks());
 		return Response.ok(nbList).build();
 	}
 	
@@ -82,10 +72,9 @@ public class NotebookSource
 	@Produces("text/xml")
 	public Response getNoteBookFromId(@PathParam("notebookId") String id)
 	{	
-		//NotebookList nbList = new NotebookList();		
+				
 		Notebook nb = new Notebook();
-		nb = directoryManager.getNotebook(id);		
-		//nbList.setNotebooks(db.getAllNotebooks());
+		nb = db.getNotebook(id);		
 		return Response.ok(nb).build();
 	}
 	
@@ -102,7 +91,7 @@ public class NotebookSource
 	@Produces("text/xml")
 	public Response getNoteFromId(@PathParam("notebookId") String nbId, @PathParam("noteId") String noteId)
 	{			
-		Notebook nb = directoryManager.getNotebook(nbId);
+		Notebook nb = db.getNotebook(nbId);
 		try
 		{
 			for(Note note : nb.getNotes())
@@ -138,9 +127,8 @@ public class NotebookSource
 	{
 		try
 		{
-			//String id =
-			directoryManager.createNotebook(title, "http:primary");
-			//Notebook nb = directoryManager.findById(id);
+			
+			db.createNotebook(title);
 			return Response.ok("Notebook: " + title + ", was added to the Database").build();
 		}
 		catch(NoteBookException ex)
@@ -161,7 +149,7 @@ public class NotebookSource
 		try
 		{
 			//String id =
-			directoryManager.createNotebook(nb.getTitle(), "http:primary");
+			db.createNotebook(nb.getTitle());
 			//Notebook nb = directoryManager.findById(id);
 			//return Response.ok("Notebook: " + nb.getTitle() + ", was added to the Database").build();
 			return Response.ok("Notebook: " + nb.getTitle() + ", was added to the Database").build();
@@ -173,8 +161,6 @@ public class NotebookSource
 					
 		}
 	}
-	
-	
 
 	
 
