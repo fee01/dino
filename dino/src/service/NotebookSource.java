@@ -15,6 +15,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import utilities.NoteBookException;
@@ -142,7 +143,7 @@ public class NotebookSource
 	}
 	
 	//adds notebook using xml notebook at path 8080/dino/
-	@POST
+	@POST	
 	@Consumes("text/xml")
 	public Response addNotebook(Notebook nb)
 	{
@@ -161,7 +162,27 @@ public class NotebookSource
 					
 		}
 	}
-
 	
+	@POST
+	@Path("/notes/{notebookId}")
+	@Consumes("text/xml")
+	@Produces(MediaType.TEXT_XML)
+	public Response addNoteToNotebook(@PathParam("notebookId") String nbId, String noteContent)
+	{
+		try
+		{
+			Notebook nb = db.getNotebook(nbId);			
+			NoteSource nsource = new NoteSource(nb);
+			nb = nsource.addNote(noteContent);
+			db.updateNotebookDatabase(nb.getId(), nb);
+			return Response.ok(nb).build();
+		}
+		catch(NoteBookException ex)
+		{
+			NotebookExceptionMapper neMapper = new NotebookExceptionMapper();
+			return neMapper.toResponse(ex);
+					
+		}		
+	}
 
 }

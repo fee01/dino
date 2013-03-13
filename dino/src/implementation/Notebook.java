@@ -44,6 +44,10 @@ public class Notebook implements Serializable
 	@XmlElement (name="note")
 	public ArrayList<Note> getNotes()
 	{
+		if(notes == null)
+		{
+			notes = new ArrayList<Note>();
+		}		
 		return notes;
 	}
 	public void setNotes(ArrayList<Note> notes)

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import utilities.NoteBookException;
 import utilities.NotebookAlreadyExistsException;
 import utilities.NotebookNotFoundException;
 
@@ -146,6 +147,19 @@ public class Directory
 		copy.putAll(this.db);
 		
 		return copy;
+	}
+	
+	public void updateNotebookDatabase(String nbId, Notebook nb) throws NoteBookException
+	{
+		if(db.containsKey(nbId))
+		{
+			db.put(nbId, nb);
+		}
+		else
+		{
+			throw new NotebookNotFoundException("Could not update notebook, no Notebook was found.");
+		}
+		
 	}
 
 }
