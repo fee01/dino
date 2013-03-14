@@ -10,13 +10,16 @@ import javax.naming.InitialContext;
  * @author Don
  *
  */
-public class EJBFactory implements DirectoryManagerFactory {
+public class EJBFactory implements DirectoryFactory 
+{
 	
-	public EJBFactory() {
+	public EJBFactory() 
+	{
 		super();
 	}
 	
-	public DirectoryManager getDirectoryManager() {
+	public Directory getDirectory() 
+	{
 		Directory mgr = null;
 		try {
 			InitialContext ic = new InitialContext();
@@ -27,5 +30,7 @@ public class EJBFactory implements DirectoryManagerFactory {
 		}
 		return mgr;
 	}
+
+	
 
 }

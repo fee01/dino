@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlType;
 public class Note implements Serializable
 {
 	private static final long serialVersionUID = 6079846718306792555L;
-	private String content;
-	private int id;
+	private String content = "";
+	private String id = "";
 	
 	@XmlElement (name="content")
 	public String getContent()
@@ -28,15 +28,20 @@ public class Note implements Serializable
 	}
 	public void setContent(String content)
 	{
+		if(content.isEmpty() || content == null || content.trim().isEmpty())
+		{
+			return;
+		}
+		
 		this.content = content;
 	}
 	
 	@XmlElement (name="id")
-	public int getId()
+	public String getId()
 	{
 		return id;
 	}
-	public void setId(int id)
+	public void setId(String id)
 	{
 		this.id = id;
 	}

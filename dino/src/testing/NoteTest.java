@@ -27,10 +27,10 @@ public class NoteTest
 	{
 		String content = "This is a note";
 		note.setContent(content);
-		note.setId(1);
+		note.setId("" + 1);
 		
 		assertEquals("This is a note", note.getContent());
-		assertEquals(1, note.getId());
+		assertEquals("1", note.getId());
 	}
 
 }

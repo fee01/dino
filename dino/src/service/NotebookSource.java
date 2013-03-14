@@ -1,60 +1,53 @@
 package service;
 
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 
-import factory.DirectoryManager;
-import factory.Factory;
 import implementation.Directory;
 import implementation.Note;
 import implementation.Notebook;
 import implementation.NotebookList;
 
 
-import javax.servlet.ServletConfig;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import utilities.BadRequest;
 import utilities.NoteBookException;
+//import utilities.NotebookAlreadyExistsException;
 import utilities.NotebookExceptionMapper;
-import utilities.NotebookNotFoundException;
 
 
 
 
-
-//@Path("notebook")
 
 @Path("")
 public class NotebookSource 
 {
-	DirectoryManager directoryManager;
 	
-	//private DirectoryManager db;
+	private Directory db;
 	
-	public NotebookSource(@Context ServletConfig config)
+	public NotebookSource()
 	{
-		directoryManager = new Factory(config).getDirectoryManager();
-		//this.db = directoryManager.getCopyDB();
-		//this.db = Directory.getDatabase();
+		this.db = Directory.getDatabase();
 	}
 	
 	
 
 	
 	@GET
+	@Path("")
 	@Produces("text/xml")
 	public Response getAllNoteBooksFromServer()
 	{
 		NotebookList nbList = new NotebookList();
-		nbList.setNotebooks(directoryManager.getAllNotebooks());
-		//nbList.setNotebooks(db.getAllNotebooks());
+		nbList.setNotebooks(db.getAllNotebooks());
 		return Response.ok(nbList).build();
 	}
 	
@@ -72,8 +65,7 @@ public class NotebookSource
 	public Response getAllNoteBooksOnCurrentServer()
 	{		
 		NotebookList nbList = new NotebookList();
-		nbList.setNotebooks(directoryManager.getAllNotebooks());
-		//nbList.setNotebooks(db.getAllNotebooks());
+		nbList.setNotebooks(db.getAllNotebooks());
 		return Response.ok(nbList).build();
 	}
 	
@@ -82,11 +74,29 @@ public class NotebookSource
 	@Produces("text/xml")
 	public Response getNoteBookFromId(@PathParam("notebookId") String id)
 	{	
-		//NotebookList nbList = new NotebookList();		
+		if(id.isEmpty() || id.trim().isEmpty() || id == null)
+		{
+			NoteBookException exception = new BadRequest();
+			NotebookExceptionMapper neMapper = new NotebookExceptionMapper();
+			return neMapper.toResponse(exception);			
+		}
+		
 		Notebook nb = new Notebook();
-		nb = directoryManager.getNotebook(id);		
-		//nbList.setNotebooks(db.getAllNotebooks());
-		return Response.ok(nb).build();
+		
+		try 
+		{
+			nb = db.getNotebook(id);	
+			return Response.ok(nb).build();
+		} 
+		catch (NoteBookException ex) 
+		{
+			NotebookExceptionMapper neMapper = new NotebookExceptionMapper();
+			return neMapper.toResponse(ex);
+		}
+			
+				
+	
+		
 	}
 	
 	@GET
@@ -102,46 +112,64 @@ public class NotebookSource
 	@Produces("text/xml")
 	public Response getNoteFromId(@PathParam("notebookId") String nbId, @PathParam("noteId") String noteId)
 	{			
-		Notebook nb = directoryManager.getNotebook(nbId);
-		try
-		{
-			for(Note note : nb.getNotes())
+		Notebook nb = null;
+		try 
+		{  
+			nb = db.getNotebook(nbId); 
+	     
+			try
 			{
-				if(note.getId() == Integer.parseInt(noteId))
+				for(Note note : nb.getNotes())
 				{
-					return Response.ok(note).build();
+					if(note.getId().equals(noteId))
+					{
+						return Response.ok(note).build();
+					}
 				}
+				return Response.status(Response.Status.NOT_FOUND)
+				.entity("Request failed: no note with that Id").type("text/plain").build();
+								
 			}
-			return Response.status(Response.Status.NOT_FOUND)
-			.entity("Request failed: no note with that Id").type("text/plain").build();
-							
+			catch(NumberFormatException nnfex)
+			{
+				return Response.status(Response.Status.BAD_REQUEST)
+						.entity("request failed: " + nnfex.getMessage()).type("text/plain").build();
+			}
+			catch(NullPointerException npex)
+			{
+				return Response.status(Response.Status.NOT_FOUND)
+						.entity("request failed: " + npex.getMessage()).type("text/plain").build();
+			}
 		}
-		catch(NumberFormatException nnfex)
+		catch(NoteBookException exception)
 		{
-			return Response.status(Response.Status.BAD_REQUEST)
-					.entity("request failed: " + nnfex.getMessage()).type("text/plain").build();
-		}
-		catch(NullPointerException npex)
-		{
-			return Response.status(Response.Status.NOT_FOUND)
-					.entity("request failed: " + npex.getMessage()).type("text/plain").build();
+			NotebookExceptionMapper neMapper = new NotebookExceptionMapper();
+			return neMapper.toResponse(exception);
 		}
 		
 	}
 	
 	
 	
+	//Everything below deals with creation Posts/Puts
+	
 	@POST
 	@Path("/notebook")
 	@Consumes("text/xml")
-	public Response createNotebook(String title)
+	public Response createNotebook(Notebook nb)
 	{
+		if(nb.getTitle().length() < 1 || nb.getTitle() == null)
+		{
+			NoteBookException exception = new BadRequest();
+			NotebookExceptionMapper neMapper = new NotebookExceptionMapper();
+			return neMapper.toResponse(exception);
+		}
+		
 		try
 		{
-			//String id =
-			directoryManager.createNotebook(title, "http:primary");
-			//Notebook nb = directoryManager.findById(id);
-			return Response.ok("Notebook: " + title + ", was added to the Database").build();
+			
+			db.createNotebook(nb.getTitle());
+			return Response.ok("Notebook: " + nb.getTitle() + ", was added to the Database").build();
 		}
 		catch(NoteBookException ex)
 		{
@@ -158,10 +186,17 @@ public class NotebookSource
 	@Consumes("text/xml")
 	public Response addNotebook(Notebook nb)
 	{
+		if(nb.getTitle().length() < 1 || nb.getTitle() == null)
+		{
+			NoteBookException exception = new BadRequest();
+			NotebookExceptionMapper neMapper = new NotebookExceptionMapper();
+			return neMapper.toResponse(exception);
+		}
+		
 		try
 		{
 			//String id =
-			directoryManager.createNotebook(nb.getTitle(), "http:primary");
+			db.createNotebook(nb.getTitle());
 			//Notebook nb = directoryManager.findById(id);
 			//return Response.ok("Notebook: " + nb.getTitle() + ", was added to the Database").build();
 			return Response.ok("Notebook: " + nb.getTitle() + ", was added to the Database").build();
@@ -173,9 +208,36 @@ public class NotebookSource
 					
 		}
 	}
-	
-	
 
 	
+	@POST
+	@Path("/notes/{notebookId}")
+	@Consumes("text/xml")
+	@Produces(MediaType.TEXT_XML)
+	public Response addNoteToNotebook(@PathParam("notebookId") String nbId, String noteContent)
+	{
+		if(noteContent == null || noteContent.trim().isEmpty() || noteContent.isEmpty())
+		{
+			NoteBookException exception = new BadRequest();
+			NotebookExceptionMapper neMapper = new NotebookExceptionMapper();
+			return neMapper.toResponse(exception);
+		}
+		
+		try
+		{
+			Notebook nb = db.getNotebook(nbId);			
+			Note nt = new Note();
+			nt.setContent(noteContent);
+			nb.addNote(nt);
+			db.updateNotebookDatabase(nb.getId(), nb);
+			return Response.ok(nb).build();
+		}
+		catch(NoteBookException ex)
+		{
+			NotebookExceptionMapper neMapper = new NotebookExceptionMapper();
+			return neMapper.toResponse(ex);
+					
+		}		
+	}
 
 }

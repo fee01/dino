@@ -47,8 +47,11 @@ public class NotebookListTest
 		{
 			i++;
 			n.setContent(i + " note content");
-			n.setId(i);
+			n.setId("" + i);
+			//System.out.println(n.getId() + " " + n.getContent());
 		}
+		
+		
 		
 		
 		return temp;

@@ -1,6 +1,7 @@
 package implementation;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -17,8 +18,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class NotebookList implements Serializable
 {
 	private static final long serialVersionUID = 2303902568394279368L;
-	private List<Notebook> notebooks;
-	
+	private List<Notebook> notebooks = new ArrayList<Notebook>();
+		
 	@XmlElement (name="notebook")
 	public List<Notebook> getNotebooks()
 	{

@@ -10,8 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import utilities.NotebookNotFoundException;
-
 
 
 
@@ -24,13 +22,13 @@ import utilities.NotebookNotFoundException;
 public class Notebook implements Serializable
 {
 	private static final long serialVersionUID = 8018457530676416928L;
-	private String id;
-	private ArrayList<Note> notes;
-	private String title;
-	private String primaryURL;
-	private String secondaryURL;
+	private String id = "";
+	private ArrayList<Note> notes = new ArrayList<Note>();
+	private String title = "";
+	private String primaryURL = "";
+	private String secondaryURL = "";
 	
-	
+	private int noteIdSetter = 0;
 	
 	@XmlElement (name="id")
 	public String getId()
@@ -43,17 +41,43 @@ public class Notebook implements Serializable
 	}
 	
 	
-	@XmlElement (name="notes")
+	@XmlElement (name="note")
 	public ArrayList<Note> getNotes()
 	{
 		return notes;
 	}
-	public void setNotes(ArrayList<Note> notes)
+	public void setNotes(ArrayList<Note> noteList)
 	{
-		this.notes = notes;
+		if(noteList == null)
+		{
+			return;
+		}
+		
+		//reset list and idSetter
+		notes = new ArrayList<Note>();
+		noteIdSetter = 0;
+		
+		for(Note n: noteList)
+		{
+			this.addNote(n);
+		}
+		
+	}
+	public void addNote(Note n) 
+	{
+		
+		if(n.getContent().isEmpty())
+		{
+			return;
+			
+		}
+		
+		n.setId(this.setNoteId());
+		this.notes.add(n);
+		
 	}
 	
-		
+	
 	@XmlElement (name="title")
 	public String getTitle()
 	{
@@ -61,6 +85,10 @@ public class Notebook implements Serializable
 	}
 	public void setTitle(String title)
 	{
+		if(title.charAt(0) == ' ')
+		{
+			return;
+		}
 		this.title = title;
 	}
 	
@@ -85,5 +113,18 @@ public class Notebook implements Serializable
 	}
 	
 	
+	private String setNoteId()
+	{
+		noteIdSetter++;
+		return "" + noteIdSetter;
+		
+		
+	}
+	
 
 }
+
+	
+	
+
+

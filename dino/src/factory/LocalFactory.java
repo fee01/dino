@@ -1,24 +1,23 @@
 package factory;
 
 import implementation.Directory;
-import implementation.Notebook;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class LocalFactory implements DirectoryManagerFactory {
+public class LocalFactory implements DirectoryFactory 
+{
 
-	private Map<String, Notebook> db = new ConcurrentHashMap<String, Notebook>();
+	private Directory d;
 	
 	public LocalFactory()
 	{
 		super();
 	}
 	
-	@Override
-	public Directory getDirectoryManager() 
+	
+	public Directory getDirectory() 
 	{
-		return new Directory(db);
+		d = Directory.getDatabase();
+		return d;
 	}
 	
 }

@@ -1,15 +1,18 @@
 package factory;
 
+import implementation.Directory;
+
 import javax.servlet.ServletConfig;
 import utilities.util;
 
-public class Factory implements DirectoryManagerFactory {
+public class Factory implements DirectoryFactory 
+{
 	
 	public static final String defaultFactoryClass = "factory.LocalFactory";
 	public static final String factoryClassParameter = "factory.class";
 	
 	private ServletConfig config;
-	private static DirectoryManagerFactory myFactory;
+	private static DirectoryFactory myFactory;
 	
 	public Factory(ServletConfig config) {
 		this.config = config;
@@ -24,8 +27,8 @@ public class Factory implements DirectoryManagerFactory {
 			try {
 			Class<?> factClass = Class.forName(factoryClassName);
 				Object fact = factClass.newInstance();
-				if( fact instanceof DirectoryManagerFactory ) {
-					myFactory = (DirectoryManagerFactory) fact;
+				if( fact instanceof DirectoryFactory ) {
+					myFactory = (DirectoryFactory) fact;
 				}
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -37,9 +40,12 @@ public class Factory implements DirectoryManagerFactory {
 		}
 	}
 
-	@Override
-	public DirectoryManager getDirectoryManager() {
+	
+	public Directory getDirectory()
+	{
 		init();
-		return myFactory.getDirectoryManager();
+		return myFactory.getDirectory();
 	}
+
+	
 }
