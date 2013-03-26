@@ -10,18 +10,14 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_17"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/lib/javaee.jar"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/domains/domain1/Jersey/jersey-archive-1.17/lib/asm-3.1.jar"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/domains/domain1/Jersey/jersey-archive-1.17/lib/jackson-core-asl-1.9.2.jar"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/domains/domain1/Jersey/jersey-archive-1.17/lib/jackson-jaxrs-1.9.2.jar"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/domains/domain1/Jersey/jersey-archive-1.17/lib/jackson-mapper-asl-1.9.2.jar"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/domains/domain1/Jersey/jersey-archive-1.17/lib/jackson-xc-1.9.2.jar"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/domains/domain1/Jersey/jersey-archive-1.17/lib/jersey-client-1.17.jar"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/domains/domain1/Jersey/jersey-archive-1.17/lib/jersey-core-1.17.jar"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/domains/domain1/Jersey/jersey-archive-1.17/lib/jersey-json-1.17.jar"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/domains/domain1/Jersey/jersey-archive-1.17/lib/jersey-server-1.17.jar"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/domains/domain1/Jersey/jersey-archive-1.17/lib/jersey-servlet-1.17.jar"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/domains/domain1/Jersey/jersey-archive-1.17/lib/jettison-1.1.jar"/>
-	<classpathentry kind="lib" path="C:/glassfish3/glassfish/domains/domain1/Jersey/jersey-archive-1.17/lib/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JFee/Documents/GitHub/dino/WebContent/WEB-INF/lib/asm-3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JFee/Documents/GitHub/dino/WebContent/WEB-INF/lib/dino-directory.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JFee/Documents/GitHub/dino/WebContent/WEB-INF/lib/dino-directory-client.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JFee/Documents/GitHub/dino/WebContent/WEB-INF/lib/javaee.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JFee/Documents/GitHub/dino/WebContent/WEB-INF/lib/jersey-bundle-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JFee/Documents/GitHub/dino/WebContent/WEB-INF/lib/jndi-properties.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JFee/Documents/GitHub/dino/WebContent/WEB-INF/lib/jsr311-api-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JFee/Documents/GitHub/dino/WebContent/WEB-INF/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="C:/Users/JFee/Documents/GitHub/dino/WebContent/WEB-INF/lib/persistence-api-1.0.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
