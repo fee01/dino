@@ -1,6 +1,6 @@
 package utilities;
 
-import implementation.Notebook;
+import implementation.NotebookXML;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,22 +18,25 @@ import javax.naming.InitialContext;
 import javax.naming.NameClassPair;
 import javax.naming.NamingEnumeration;
 
+import org.apache.log4j.Logger;
+
+
+import dino.api.Directory;
+
 //import dino.api.Directory;
-import implementation.Directory;
+//import implementation.Directory;
 /**
  *Derived direct from dino
  * senthil ramasamy
  * https://bitbucket.org/senthil/team2/overview
  *
  */
-
 public class EJBLocator {
 	
-	
+	private static final Logger logger = Logger.getLogger(EJBLocator.class);
 	private static EJBLocator self = new EJBLocator();
     private static Map<String,Object> cacheMap = new HashMap<String,Object>();
-    
-    //private static final String directory_jndi_name = "team2.dino.Directory";
+   
     private static final String directory_jndi_name = "dino.api.Directory";
     private static final String message_queue_name = "syncmessages";
      
@@ -65,20 +68,20 @@ public class EJBLocator {
                 	NameClassPair ncp = list.next();
                 	myJndiName = ncp.getName();
                 	if (myJndiName.indexOf(jndiName) != -1) {
-                		
+                		logger.debug("Matching JNDI Name found : " + myJndiName);
                 		break;
                 	}
                 }
                 object = context.lookup(myJndiName);
                 cacheMap.put(cacheName,object);
             }catch(Exception ex){
-            	
+            	logger.fatal("Error finding EJB", ex);
                 return null;
             } 
         }
         
         return object;    	
-//		
+
     }
 
     public static EJBLocator getInstance() {
@@ -86,7 +89,7 @@ public class EJBLocator {
     }
     
     public Directory getDirectoryService() {
-        Directory directory = (Directory) lookup(directory_jndi_name);
+    	Directory directory = (Directory) lookup(directory_jndi_name);
         return directory;
     }
 
@@ -116,8 +119,8 @@ public class EJBLocator {
 		EJBLocator.jndiPort = jndiPort;
 	}
 
-	public void sendQueue(String secondaryServer, Notebook notebook) { 
-		
+	public void sendQueue(String secondaryServer, NotebookXML xmlNotebook) { 
+		logger.debug("Sending Sync Messages to " + secondaryServer);
 			try {
 				
 				InitialContext context;
@@ -131,13 +134,13 @@ public class EJBLocator {
 				QueueConnectionFactory factory = (QueueConnectionFactory) context.lookup("ConnectionFactory");
 				QueueConnection queueConnection = factory.createQueueConnection();
 				QueueSession session = queueConnection.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
-				ObjectMessage objectMessage = session.createObjectMessage(notebook);
+				ObjectMessage objectMessage = session.createObjectMessage(xmlNotebook);
 				QueueSender sender = session.createSender(queue);
 				sender.send(objectMessage);
-				
+				logger.debug("Message " + xmlNotebook.getTitle() + " sent successfully.");
 
 			} catch (Exception e) {
-				
+				logger.error("JMS Error", e);
 			}
 	}
     

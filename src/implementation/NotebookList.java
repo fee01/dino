@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 
+
 /**
  * List of Notebooks
  * @author   JFee
@@ -17,19 +18,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement (name="notebook-list")
 public class NotebookList implements Serializable
 {
-	private static final long serialVersionUID = 2303902568394279368L;
-	private List<Notebook> notebooks = new ArrayList<Notebook>();
-		
-	@XmlElement (name="notebook")
-	public List<Notebook> getNotebooks()
-	{
-		return this.notebooks;
-	}
+	private static final long serialVersionUID = 6477831092880918053L;
+	private List<NotebookXML> notebooks;
 	
-	public void setNotebooks(List<Notebook> theList)
-	{
-		this.notebooks = theList;
+	public NotebookList() {
+		super();
 	}
+
+	@XmlElement (name="notebook")
+	public List<NotebookXML> getNotebooks() {return notebooks;}
+	public void setNotebooks(List<NotebookXML> notebooks) {this.notebooks = notebooks;}
 	
 
 }

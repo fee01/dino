@@ -3,7 +3,7 @@ package testing;
 import static org.junit.Assert.*;
 
 import implementation.Note;
-import implementation.Notebook;
+import implementation.NotebookXML;
 
 import java.util.ArrayList;
 
@@ -20,7 +20,7 @@ import utilities.BadRequest;
 public class NotebookTest
 {
 	private ArrayList<Note> notes;
-	private Notebook book;
+	private NotebookXML book;
 	private static int i = 0;
 	private static ArrayList<Note> createNotes()
 	{
@@ -55,7 +55,7 @@ public class NotebookTest
 	public void setUp() throws Exception
 	{
 		notes = NotebookTest.createNotes();
-		book = new Notebook();
+		book = new NotebookXML();
 		
 	}
 
@@ -112,7 +112,7 @@ public class NotebookTest
 		
 		//should not delete anything
 		Note nTemp = new Note();
-		boolean caught = false;
+		
 		
 		assertFalse(book.deleteNote(nTemp));
 		
@@ -123,7 +123,7 @@ public class NotebookTest
 		
 		//should delete and move noteIdSetter back 1
 		//note at index 3 = NOTE with id 4
-		caught = false;
+		
 		notes = NotebookTest.createNotes();
 		book.setNotes(notes);
 		Note foundNote = book.getNotes().get(3);
@@ -161,9 +161,10 @@ public class NotebookTest
 		
 		
 		//test title can't start with whitespace
-		book = new Notebook();
+		//book = new NotebookXML();
+		System.out.println(book.getId());
 		book.setTitle(" Title");
-		assertTrue(book.getTitle().isEmpty());
+		assertEquals("FIRST", book.getTitle());
 		
 		
 		

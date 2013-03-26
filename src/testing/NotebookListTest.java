@@ -3,7 +3,7 @@ package testing;
 import static org.junit.Assert.*;
 
 import implementation.Note;
-import implementation.Notebook;
+import implementation.NotebookXML;
 import implementation.NotebookList;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class NotebookListTest
 	private static int i = 0;
 	private static int j = 0;
 	
-	private List<Notebook> notebooks;
+	private List<NotebookXML> notebooks;
 	
 	private static ArrayList<Note> createNotes()
 	{
@@ -58,14 +58,14 @@ public class NotebookListTest
 		
 	}
 	
-	private static List<Notebook> createBooks()
+	private static List<NotebookXML> createBooks()
 	{
-		Notebook one = new Notebook();
-		Notebook two = new Notebook();
-		Notebook three = new Notebook();
-		Notebook four = new Notebook();
-		Notebook five = new Notebook();
-		List<Notebook> temp = new ArrayList<Notebook>();
+		NotebookXML one = new NotebookXML();
+		NotebookXML two = new NotebookXML();
+		NotebookXML three = new NotebookXML();
+		NotebookXML four = new NotebookXML();
+		NotebookXML five = new NotebookXML();
+		List<NotebookXML> temp = new ArrayList<NotebookXML>();
 		temp.add(one);
 		temp.add(two);
 		temp.add(three);
@@ -73,7 +73,7 @@ public class NotebookListTest
 		temp.add(five);
 		
 		
-		for(Notebook nb: temp)
+		for(NotebookXML nb: temp)
 		{
 			j++;
 			String id = j + "";

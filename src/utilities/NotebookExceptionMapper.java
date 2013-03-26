@@ -13,17 +13,8 @@ public class NotebookExceptionMapper
 		{
 			String summary = "unspecified problem";
 			Response.Status status = Response.Status.INTERNAL_SERVER_ERROR;
-			if( me instanceof NotebookNotFoundException ) 
-			{
-				summary = "not found";
-				status = Response.Status.NOT_FOUND;
-			} 
-			else if( me instanceof NotebookAlreadyExistsException ) 
-			{
-				summary = "Notebook already exists";
-				status = Response.Status.CONFLICT;
-			}
-			else if( me instanceof BadRequest)
+			
+			if( me instanceof BadRequest)
 			{
 				summary = "Bad Request";
 				status = Response.Status.BAD_REQUEST;

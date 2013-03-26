@@ -78,7 +78,7 @@ public class ConfigSource implements ConfigResource {
 		else
 		{
 			hostNameAndPort = localhost + ":8080";
-			url = "http://" + hostNameAndPort + "/plass_fee_team";
+			url = "http://" + hostNameAndPort;
 		}
 		}
 		return url;
@@ -120,8 +120,7 @@ public class ConfigSource implements ConfigResource {
 	@Path("/self/{hostport}")
 	public Response setConfigPost(@PathParam("hostport") String hostport,
 			@Context UriInfo uriInfo, @Context ServletContext servletContext) {
-		// TODO Auto-generated method stub
-		return null;
+		return setConfig(hostport, uriInfo, servletContext);
 	}
 
 	
@@ -137,8 +136,9 @@ public class ConfigSource implements ConfigResource {
 	@Path("/self/{hostport}")
 	public Response setConfig(@PathParam("hostport") String hostport,
 			@Context UriInfo uriInfo, @Context ServletContext servletContext) {
-		// TODO Auto-generated method stub
-		return null;
+		hostNameAndPort = hostport;
+		url = "http://" + hostNameAndPort;		
+		return Response.ok().build();
 	}
 
 	
